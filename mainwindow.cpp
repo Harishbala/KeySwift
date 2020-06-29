@@ -2,6 +2,7 @@
 #include <QtWidgets/QTextEdit>
 #include <QHBoxLayout>
 #include <QKeyEvent>
+#include <QClipboard>
 #include "./ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
@@ -30,8 +31,23 @@ MainWindow::~MainWindow()
 
 void MainWindow::keyPressEvent(QKeyEvent* event)
 {
-    auto tamilKey = key_translator.getTamilKey(event->key());
     QString tamilText = m_tamil_editor->toPlainText();
-    tamilText += tamilKey;
+
+    if(event->key() == Qt::Key::Key_Backspace)
+    {
+        int lastIndex = tamilText.length() - 1;
+        tamilText.remove(lastIndex, 1);
+    }
+    else if(event->key() == Qt::Key::Key_Control)
+    {
+        QClipboard *clipboard = QApplication::clipboard();
+        clipboard->setText(tamilText);
+    }
+    else
+    {
+        auto tamilKey = key_translator.getTamilKey(event);
+        tamilText += tamilKey;
+    }
+
     m_tamil_editor->setText(tamilText);
 }
