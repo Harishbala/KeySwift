@@ -43,6 +43,10 @@ void MainWindow::keyPressEvent(QKeyEvent* event)
         QClipboard *clipboard = QApplication::clipboard();
         clipboard->setText(tamilText);
     }
+    else if(event->key() == Qt::Key::Key_Alt)
+    {
+        tamilText = "";
+    }
     else
     {
         auto tamilKey = key_translator.getTamilKey(event);
