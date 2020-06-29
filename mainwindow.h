@@ -21,6 +21,9 @@ public:
 
     void keyPressEvent(QKeyEvent* event);
 
+protected:
+    void focusOutEvent(QFocusEvent* e);
+
 private:
     QtKeyToTamilKey key_translator;
     QTextEdit *m_tamil_editor;

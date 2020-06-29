@@ -51,3 +51,10 @@ void MainWindow::keyPressEvent(QKeyEvent* event)
 
     m_tamil_editor->setText(tamilText);
 }
+
+void MainWindow::focusOutEvent(QFocusEvent* e)
+{
+    //If the focus is last from the mainwindow, the keyPressEvent is not fired for space charecter.
+    //So always receive set the focus to mainwindow
+    this->setFocus();
+}
