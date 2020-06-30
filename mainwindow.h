@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QtWidgets/QTextEdit>
 #include <QtKeyToTamilKey.h>
 
 QT_BEGIN_NAMESPACE
@@ -11,6 +12,19 @@ QT_END_NAMESPACE
 class QTextEdit;
 class QHBoxLayout;
 
+class TTWTextEdit : public QTextEdit
+{
+public:
+    TTWTextEdit(QWidget *parent)
+        : QTextEdit(parent)
+    {}
+protected:
+    void keyPressEvent(QKeyEvent* event);
+
+private:
+    QtKeyToTamilKey key_translator;
+};
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -19,14 +33,12 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    void keyPressEvent(QKeyEvent* event);
-
 protected:
     void focusOutEvent(QFocusEvent* e);
 
 private:
     QtKeyToTamilKey key_translator;
-    QTextEdit *m_tamil_editor;
+    TTWTextEdit *m_tamil_editor;
     QHBoxLayout *m_layout;
     Ui::MainWindow *ui;
 

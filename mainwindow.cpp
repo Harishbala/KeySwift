@@ -11,15 +11,15 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    m_tamil_editor = new QTextEdit(parent);
+    m_tamil_editor = new TTWTextEdit(parent);
 
     m_layout = new QHBoxLayout();
     m_layout->addWidget(m_tamil_editor);
 
     this->centralWidget()->setLayout(m_layout);
 
-    m_tamil_editor->setReadOnly(true);
-    this->setFocus();
+    //m_tamil_editor->setReadOnly(true);
+    //this->setFocus();
 }
 
 MainWindow::~MainWindow()
@@ -29,36 +29,43 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::keyPressEvent(QKeyEvent* event)
+void TTWTextEdit::keyPressEvent(QKeyEvent* event)
 {
-    QString tamilText = m_tamil_editor->toPlainText();
+    //QString tamilText = m_tamil_editor->toPlainText();
 
     if(event->key() == Qt::Key::Key_Backspace)
     {
-        int lastIndex = tamilText.length() - 1;
-        tamilText.remove(lastIndex, 1);
+        QTextEdit::keyPressEvent(event);
+        return;
     }
     else if(event->key() == Qt::Key::Key_Control)
     {
+        QString tamilText = this->toPlainText();
         QClipboard *clipboard = QApplication::clipboard();
         clipboard->setText(tamilText);
     }
     else if(event->key() == Qt::Key::Key_Alt)
     {
-        tamilText = "";
+        this->clear();
     }
     else
     {
-        auto tamilKey = key_translator.getTamilKey(event);
-        tamilText += tamilKey;
+        QString tamilText = this->toPlainText();
+        QString prevKey = "";
+        if(tamilText.length() > 0)
+        {
+            auto lastIndex = tamilText.length() - 1;
+            prevKey = QString(tamilText[lastIndex]);
+        }
+        auto tamilKey = key_translator.getTamilKey(event, prevKey);
+        tamilText = tamilKey;
+        this->textCursor().insertText(tamilText);
     }
-
-    m_tamil_editor->setText(tamilText);
 }
 
 void MainWindow::focusOutEvent(QFocusEvent* e)
 {
     //If the focus is last from the mainwindow, the keyPressEvent is not fired for space charecter.
     //So always receive set the focus to mainwindow
-    this->setFocus();
+    //this->setFocus();
 }

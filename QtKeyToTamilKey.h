@@ -27,12 +27,11 @@ class QtKeyToTamilKey
 {
 public:
     QtKeyToTamilKey();
-    const QString getTamilKey(QKeyEvent* event);
+    const QString getTamilKey(QKeyEvent* event, QString previousLetter);
 private:
-    bool isPrevKeyTamilConsonant();
+    bool isPrevKeyTamilConsonant(QString previousLetter);
     bool isTamilVowel(QString letter);
 
-    QString m_prev_key = "";
     std::map<QString, TamilKeyMapping> m_key_map;
     std::set<QString> m_vowel_set;
     std::set<QString> m_consonant_set;
