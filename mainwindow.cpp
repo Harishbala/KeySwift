@@ -31,8 +31,6 @@ MainWindow::~MainWindow()
 
 void TTWTextEdit::keyPressEvent(QKeyEvent* event)
 {
-    //QString tamilText = m_tamil_editor->toPlainText();
-
     if(event->key() == Qt::Key::Key_Backspace)
     {
         QTextEdit::keyPressEvent(event);
@@ -52,20 +50,13 @@ void TTWTextEdit::keyPressEvent(QKeyEvent* event)
     {
         QString tamilText = this->toPlainText();
         QString prevKey = "";
-        if(tamilText.length() > 0)
+        const auto position = this->textCursor().position();
+        if(position > 0)
         {
-            auto lastIndex = tamilText.length() - 1;
-            prevKey = QString(tamilText[lastIndex]);
+            prevKey = QString(tamilText[position - 1]);
         }
         auto tamilKey = key_translator.getTamilKey(event, prevKey);
         tamilText = tamilKey;
         this->textCursor().insertText(tamilText);
     }
-}
-
-void MainWindow::focusOutEvent(QFocusEvent* e)
-{
-    //If the focus is last from the mainwindow, the keyPressEvent is not fired for space charecter.
-    //So always receive set the focus to mainwindow
-    //this->setFocus();
 }

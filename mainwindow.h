@@ -33,9 +33,6 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-protected:
-    void focusOutEvent(QFocusEvent* e);
-
 private:
     QtKeyToTamilKey key_translator;
     TTWTextEdit *m_tamil_editor;
