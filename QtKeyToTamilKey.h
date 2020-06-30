@@ -27,7 +27,7 @@ class QtKeyToTamilKey
 {
 public:
     QtKeyToTamilKey();
-    const QString getTamilKey(QKeyEvent* event, QString previousLetter);
+    bool getTamilKey(QKeyEvent* event, QString previousLetter, QString& tamilKey);
 private:
     bool isPrevKeyTamilConsonant(QString previousLetter);
     bool isTamilVowel(QString letter);

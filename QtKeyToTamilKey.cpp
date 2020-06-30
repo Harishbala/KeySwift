@@ -109,9 +109,9 @@ QtKeyToTamilKey::QtKeyToTamilKey()
     m_consonant_set.insert("ஹ");
     m_consonant_set.insert("க்ஷ");
 }
-const QString QtKeyToTamilKey::getTamilKey(QKeyEvent* event, QString previousLetter)
+bool QtKeyToTamilKey::getTamilKey(QKeyEvent* event, QString previousLetter, QString& tamilKey)
 {
-    QString tamilKey = "";
+    tamilKey = "";
     auto key_element = m_key_map.find(event->text());
     if(key_element != m_key_map.end())
     {
@@ -123,12 +123,9 @@ const QString QtKeyToTamilKey::getTamilKey(QKeyEvent* event, QString previousLet
         {
             tamilKey = key_element->second.simple_press;
         }
+        return true;
     }
-    else
-    {
-        tamilKey = event->text();
-    }
-    return tamilKey;
+    return false;
 }
 
 bool QtKeyToTamilKey::isPrevKeyTamilConsonant(QString previousLetter)

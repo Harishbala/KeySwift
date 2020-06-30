@@ -55,8 +55,14 @@ void TTWTextEdit::keyPressEvent(QKeyEvent* event)
         {
             prevKey = QString(tamilText[position - 1]);
         }
-        auto tamilKey = key_translator.getTamilKey(event, prevKey);
-        tamilText = tamilKey;
-        this->textCursor().insertText(tamilText);
+        QString tamilKey{""};
+        if(key_translator.getTamilKey(event, prevKey, tamilKey))
+        {
+            this->textCursor().insertText(tamilKey);
+        }
+        else
+        {
+            QTextEdit::keyPressEvent(event);
+        }
     }
 }
