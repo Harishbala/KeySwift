@@ -7,12 +7,13 @@
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
+    , m_english_toggle(false)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
     ui->textEdit->installEventFilter(this);
 
-    QObject::connect(ui->toggleButton, SIGNAL(clicked()), this, SLOT(button_clicked()));
+    QObject::connect(ui->checkBox, SIGNAL(clicked()), this, SLOT(button_clicked()));
 }
 
 MainWindow::~MainWindow()
@@ -29,7 +30,7 @@ bool MainWindow::eventFilter(QObject* obj, QEvent* event)
 {
     if(event->type() == QEvent::KeyPress)
     {
-        QKeyEvent* key_event = static_cast<QKeyEvent*>(event);
+        auto key_event = dynamic_cast<QKeyEvent*>(event);
         if(textEditKeyPressed(key_event))
             return true;
     }
@@ -38,21 +39,21 @@ bool MainWindow::eventFilter(QObject* obj, QEvent* event)
 
 bool MainWindow::textEditKeyPressed(QKeyEvent* event)
 {
+    if(event->key() == Qt::Key::Key_F2)
+    {
+        ui->checkBox->click();
+        return true;
+    }
+
     if(m_english_toggle)
     {
         return false;
     }
-
     else if(event->key() == Qt::Key::Key_Control)
     {
         QString tamilText = ui->textEdit->toPlainText();
         QClipboard *clipboard = QApplication::clipboard();
         clipboard->setText(tamilText);
-        return true;
-    }
-    else if(event->key() == Qt::Key::Key_Alt)
-    {
-        ui->textEdit->clear();
         return true;
     }
     else

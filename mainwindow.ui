@@ -14,19 +14,6 @@
    <string>TamilTypeWriter</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="toggleButton">
-    <property name="geometry">
-     <rect>
-      <x>652</x>
-      <y>520</y>
-      <width>131</width>
-      <height>32</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Toggle Eng/Tam</string>
-    </property>
-   </widget>
    <widget class="QTextEdit" name="textEdit">
     <property name="geometry">
      <rect>
@@ -35,6 +22,19 @@
       <width>801</width>
       <height>511</height>
      </rect>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBox">
+    <property name="geometry">
+     <rect>
+      <x>560</x>
+      <y>530</y>
+      <width>161</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Toggle to English(F2)</string>
     </property>
    </widget>
   </widget>
