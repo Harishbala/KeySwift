@@ -15,11 +15,12 @@ MainWindow::MainWindow(QWidget *parent)
 
     m_layout = new QHBoxLayout();
     m_layout->addWidget(m_tamil_editor);
+    m_layout->addWidget(ui->toggleButton);
 
     this->centralWidget()->setLayout(m_layout);
 
-    //m_tamil_editor->setReadOnly(true);
-    //this->setFocus();
+
+    QObject::connect(ui->toggleButton, SIGNAL(clicked()), this, SLOT(button_clicked()));
 }
 
 MainWindow::~MainWindow()
@@ -29,8 +30,28 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::button_clicked()
+{
+    m_tamil_editor->set_english_toggle(!m_tamil_editor->get_english_toggle());
+}
+
+bool TTWTextEdit::get_english_toggle() const
+{
+    return m_english_toggle;
+}
+
+void TTWTextEdit::set_english_toggle(bool toggle)
+{
+    m_english_toggle = toggle;
+}
 void TTWTextEdit::keyPressEvent(QKeyEvent* event)
 {
+    if(get_english_toggle())
+    {
+        QTextEdit::keyPressEvent(event);
+        return;
+    }
+
     if(event->key() == Qt::Key::Key_Backspace)
     {
         QTextEdit::keyPressEvent(event);
@@ -56,7 +77,7 @@ void TTWTextEdit::keyPressEvent(QKeyEvent* event)
             prevKey = QString(tamilText[position - 1]);
         }
         QString tamilKey{""};
-        if(key_translator.getTamilKey(event, prevKey, tamilKey))
+        if(m_key_translator.getTamilKey(event, prevKey, tamilKey))
         {
             this->textCursor().insertText(tamilKey);
         }
