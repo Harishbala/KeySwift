@@ -24,11 +24,11 @@ public:
 
     void set_english_toggle(bool toggle);
     bool get_english_toggle() const;
-protected:
-    void keyPressEvent(QKeyEvent* event);
+    void event_handler(QEvent* event);
+//protected:
+    //void keyPressEvent(QKeyEvent* event);
 
 private:
-    QtKeyToTamilKey m_key_translator;
     bool m_english_toggle;
 };
 
@@ -43,10 +43,16 @@ public:
 public slots:
     void button_clicked();
 
-private:    
+protected:
+    bool eventFilter(QObject* obj, QEvent* event);
+
+private:
+    bool ownkeyPressEvent(QKeyEvent* event);
+
     QtKeyToTamilKey key_translator;
     TTWTextEdit *m_tamil_editor;
     QHBoxLayout *m_layout;
+    QtKeyToTamilKey m_key_translator;
     //QPushButton toggleButton;
     Ui::MainWindow *ui;
 

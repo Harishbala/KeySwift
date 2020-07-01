@@ -12,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     m_tamil_editor = new TTWTextEdit(parent);
+    m_tamil_editor->installEventFilter(this);
 
     m_layout = new QHBoxLayout();
     m_layout->addWidget(m_tamil_editor);
@@ -44,34 +45,42 @@ void TTWTextEdit::set_english_toggle(bool toggle)
 {
     m_english_toggle = toggle;
 }
-void TTWTextEdit::keyPressEvent(QKeyEvent* event)
+
+bool MainWindow::eventFilter(QObject* obj, QEvent* event)
 {
-    if(get_english_toggle())
+    if(event->type() == QEvent::KeyPress)
     {
-        QTextEdit::keyPressEvent(event);
-        return;
+        QKeyEvent* key_event = static_cast<QKeyEvent*>(event);
+        if(ownkeyPressEvent(key_event))
+            return true;
+    }
+    return QObject::eventFilter(obj, event);
+}
+
+bool MainWindow::ownkeyPressEvent(QKeyEvent* event)
+{
+    if(m_tamil_editor->get_english_toggle())
+    {
+        return false;
     }
 
-    if(event->key() == Qt::Key::Key_Backspace)
-    {
-        QTextEdit::keyPressEvent(event);
-        return;
-    }
     else if(event->key() == Qt::Key::Key_Control)
     {
-        QString tamilText = this->toPlainText();
+        QString tamilText = m_tamil_editor->toPlainText();
         QClipboard *clipboard = QApplication::clipboard();
         clipboard->setText(tamilText);
+        return true;
     }
     else if(event->key() == Qt::Key::Key_Alt)
     {
-        this->clear();
+        m_tamil_editor->clear();
+        return true;
     }
     else
     {
-        QString tamilText = this->toPlainText();
+        QString tamilText = m_tamil_editor->toPlainText();
         QString prevKey = "";
-        const auto position = this->textCursor().position();
+        const auto position = m_tamil_editor->textCursor().position();
         if(position > 0)
         {
             prevKey = QString(tamilText[position - 1]);
@@ -79,11 +88,11 @@ void TTWTextEdit::keyPressEvent(QKeyEvent* event)
         QString tamilKey{""};
         if(m_key_translator.getTamilKey(event, prevKey, tamilKey))
         {
-            this->textCursor().insertText(tamilKey);
+            m_tamil_editor->textCursor().insertText(tamilKey);
+            return true;
         }
-        else
-        {
-            QTextEdit::keyPressEvent(event);
-        }
+
     }
+
+    return false;
 }
