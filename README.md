@@ -1,5 +1,5 @@
-# TamilTypeWriter
+# KeySwift
 
-Work in progress - not ready yet.
+Application to translate the keyboard input into another language. At the moment only support for Tamil language is available.
 
-Simple editor to enable tamil typing.
+![Image of KeySwift](https://github.com/Harishbala/KeySwift/blob/master/KeySwift.png)
