@@ -7,20 +7,21 @@ project(keyswift LANGUAGES CXX)
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 
 set (keyswiftLib_src
- ${PROJECT_SOURCE_DIR}/mainwindow.cpp
- ${PROJECT_SOURCE_DIR}/QtKeyToTamilKey.cpp)
+ ${PROJECT_SOURCE_DIR}/src/mainwindow.cpp
+ ${PROJECT_SOURCE_DIR}/src/QtKeyToTamilKey.cpp)
 
 set (keyswiftLib_hdr
- ${PROJECT_SOURCE_DIR}/mainwindow.h
- ${PROJECT_SOURCE_DIR}/QtKeyToTamilKey.h)
+ ${PROJECT_SOURCE_DIR}/include/mainwindow.h
+ ${PROJECT_SOURCE_DIR}/include/QtKeyToTamilKey.h)
 
-set (keyswiftLib_ui ${PROJECT_SOURCE_DIR}/mainwindow.ui)
-set (keyswiftBin_src ${PROJECT_SOURCE_DIR}/main.cpp)
+set (keyswiftLib_ui ${PROJECT_SOURCE_DIR}/forms/mainwindow.ui)
+set (keyswiftBin_src ${PROJECT_SOURCE_DIR}/src/main.cpp)
 
 qt5_wrap_cpp(keyswiftLib_hdr_moc ${keyswiftLib_hdr})
 qt5_wrap_ui(keyswiftLib_ui_moc ${keyswiftLib_ui})
 
 include_directories (${PROJECT_SOURCE_DIR})
+include_directories (${PROJECT_SOURCE_DIR}/include)
 include_directories (${PROJECT_BINARY_DIR})
 
 add_library(keyswiftLib SHARED
