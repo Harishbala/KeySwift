@@ -1,53 +1,30 @@
+#-DCMAKE_PREFIX_PATH=/usr/local/Cellar/qt/
+#cmake .. -DCMAKE_PREFIX_PATH=/usr/local/Cellar/qt/
 cmake_minimum_required(VERSION 3.5)
 
-project(TamilTypeWriter LANGUAGES CXX)
-
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
-
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-
-# QtCreator supports the following variables for Android, which are identical to qmake Android variables.
-# Check http://doc.qt.io/qt-5/deployment-android.html for more information.
-# They need to be set before the find_package(Qt5 ...) call.
-
-#if(ANDROID)
-#    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
-#    if (ANDROID_ABI STREQUAL "armeabi-v7a")
-#        set(ANDROID_EXTRA_LIBS
-#            ${CMAKE_CURRENT_SOURCE_DIR}/path/to/libcrypto.so
-#            ${CMAKE_CURRENT_SOURCE_DIR}/path/to/libssl.so)
-#    endif()
-#endif()
+project(KeySwift LANGUAGES CXX)
 
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 
-file(GLOB SOURCES
-    *.h
-    *.cpp
-    )
+set (KeySwiftLib_src ${PROJECT_SOURCE_DIR}/*.cpp)
+set (KeySwiftLib_hdr ${PROJECT_SOURCE_DIR}/*.h)
+set (KeySwiftLib_ui ${PROJECT_SOURCE_DIR}/mainwindow.ui)
+set (KeySwiftBin_src ${PROJECT_SOURCE_DIR}/main.cpp)
 
-if(ANDROID)
-  add_library(TamilTypeWriter SHARED
-    main.cpp
-    mainwindow.cpp
-    mainwindow.h
-    mainwindow.ui
-  )
-else()
-  add_executable(TamilTypeWriter
-    main.cpp
-    mainwindow.cpp
-    mainwindow.h
-    QtKeyToTamilKey.cpp
-    QtKeyToTamilKey.h
-    mainwindow.ui
-  )
-endif()
+qt5_wrap_cpp(KeySwiftLib_hdr_moc ${KeySwiftLib_hdr})
+qt5_wrap_ui(KeySwiftLib_ui_moc ${KeySwiftLib_ui})
 
-target_link_libraries(TamilTypeWriter PRIVATE Qt5::Widgets)
+include_directories (${PROJECT_SOURCE_DIR})
+include_directories (${PROJECT_BINARY_DIR})
+
+add_library(KeySwiftLib SHARED
+  ${KeySwiftLib_src}
+  ${KeySwiftLib_hdr_moc}
+  ${KeySwiftLib_ui_moc}
+  )
+
+target_link_libraries (KeySwiftLib Qt5::Widgets)
+
+add_executable(KeySwift ${KeySwiftBin_src})
+
+target_link_libraries (KeySwift KeySwiftLib)
