@@ -1,30 +1,36 @@
-#-DCMAKE_PREFIX_PATH=/usr/local/Cellar/qt/
-#cmake .. -DCMAKE_PREFIX_PATH=/usr/local/Cellar/qt/
+# console commands for quick reference
+# cmake .. -DCMAKE_PREFIX_PATH=/usr/local/Cellar/qt/5.14.1/
 cmake_minimum_required(VERSION 3.5)
 
-project(KeySwift LANGUAGES CXX)
+project(keyswift LANGUAGES CXX)
 
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 
-set (KeySwiftLib_src ${PROJECT_SOURCE_DIR}/*.cpp)
-set (KeySwiftLib_hdr ${PROJECT_SOURCE_DIR}/*.h)
-set (KeySwiftLib_ui ${PROJECT_SOURCE_DIR}/mainwindow.ui)
-set (KeySwiftBin_src ${PROJECT_SOURCE_DIR}/main.cpp)
+set (keyswiftLib_src
+ ${PROJECT_SOURCE_DIR}/mainwindow.cpp
+ ${PROJECT_SOURCE_DIR}/QtKeyToTamilKey.cpp)
 
-qt5_wrap_cpp(KeySwiftLib_hdr_moc ${KeySwiftLib_hdr})
-qt5_wrap_ui(KeySwiftLib_ui_moc ${KeySwiftLib_ui})
+set (keyswiftLib_hdr
+ ${PROJECT_SOURCE_DIR}/mainwindow.h
+ ${PROJECT_SOURCE_DIR}/QtKeyToTamilKey.h)
+
+set (keyswiftLib_ui ${PROJECT_SOURCE_DIR}/mainwindow.ui)
+set (keyswiftBin_src ${PROJECT_SOURCE_DIR}/main.cpp)
+
+qt5_wrap_cpp(keyswiftLib_hdr_moc ${keyswiftLib_hdr})
+qt5_wrap_ui(keyswiftLib_ui_moc ${keyswiftLib_ui})
 
 include_directories (${PROJECT_SOURCE_DIR})
 include_directories (${PROJECT_BINARY_DIR})
 
-add_library(KeySwiftLib SHARED
-  ${KeySwiftLib_src}
-  ${KeySwiftLib_hdr_moc}
-  ${KeySwiftLib_ui_moc}
+add_library(keyswiftLib SHARED
+  ${keyswiftLib_src}
+  ${keyswiftLib_hdr_moc}
+  ${keyswiftLib_ui_moc}
   )
 
-target_link_libraries (KeySwiftLib Qt5::Widgets)
+target_link_libraries (keyswiftLib Qt5::Widgets)
 
-add_executable(KeySwift ${KeySwiftBin_src})
+add_executable(keyswift ${keyswiftBin_src})
 
-target_link_libraries (KeySwift KeySwiftLib)
+target_link_libraries (keyswift keyswiftLib)
